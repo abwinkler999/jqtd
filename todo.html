@@ -3,20 +3,66 @@
 <head>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript"></script>
-  <script>
-    var toDos = new Array();
-    toDos[0] = "Foo";
+  <script type="text/javascript">
+  var toDos = new Array();
+  
+  function toDoSaver(){
+    /*if (!supportsLocalStorage()) {return false; }*/
+    for (var i = 0; i < toDos.length; i ++)
+    {
+      localStorage["todo." + i + ".text"] = toDos[i];
+    }
+    return true;
+  }
+  
+  function toDoLoader(){
+    /*if (!supportsLocalStorage()) { return false; }*/
+    for (var i = 0; i < 100; i++) {
+      if (localStorage["todo." + i + ".text"] != undefined)
+      {
+        window.console.log("Loaded item:" + localStorage["todo." + i + ".text"])
+        toDos.push(localStorage["todo." + i + ".text"]);
+      }
+    }
+  }
+  
+  function toDoDisplayer(){
+    toDos.forEach(function(value)
+    {
+      $("#items").append("<li>" + value + "</li>");
+      window.console.log("Displayed: " + value);
+    }
+    )
+  }
+  
+
+ /*   toDos[0] = "Foo";
     toDos[1] = "Bar";
     toDos[2] = "Baz";
+*/
 
     $(window).load(function() {
       
+      toDoLoader();
+      toDoDisplayer();
+      
 
-      toDos.forEach(function(value)
+ /*     toDos.forEach(function(value)
       {
         $("#items").append("<li>" + value + "</li>");
       });
-      
+ */     
+      $("#target").on('click', function(){
+        window.console.log("Appending item")
+        toDos.push($("input:first").val());
+        $("#items").append("<li>" + $("input:first").val() + "</li>");
+        toDos.forEach(function(value)
+        {
+          window.console.log("item: " + value);
+        })
+        toDoSaver();
+      });
+            
       $("li").on('click', function () {
         window.console.log("Click happened");
         $(this).slideUp();
@@ -34,10 +80,10 @@
   <ol id="items">
   <!-- No list items present at load -->
   </ol>
-  
-  <form>
-    New task:<input type="text" name="new_task" value="Something or other" />
-    <input type="submit" value="Add">
+
+  <form id="target">
+    <input type= "text" value="value text" />
+    <input type = "button" value="Submit Button" />
   </form>
   
 
