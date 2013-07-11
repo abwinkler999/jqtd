@@ -1,14 +1,22 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-
+  <style type="text/css">
+    #middlebox{ margin-left:400px; margin-top:100px;}
+  </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript"></script>
   <script type="text/javascript">
+  
+  function toDoItem(id, text){
+    this.id = id;
+    this.text = text;
+  }
+  
   var toDos = new Array();
   
   function toDoSaver(){
     /*if (!supportsLocalStorage()) {return false; }*/
-    for (var i = 0; i < toDos.length; i ++)
+    for (var i = 0; i < toDos.length; i++)
     {
       localStorage["todo." + i + ".text"] = toDos[i];
     }
@@ -21,16 +29,18 @@
       if (localStorage["todo." + i + ".text"] != undefined)
       {
         window.console.log("Loaded item:" + localStorage["todo." + i + ".text"])
-        toDos.push(localStorage["todo." + i + ".text"]);
+        var item = new toDoItem(i, localStorage["todo."] + i + ".text")
+        toDos.push(item);
+        /*toDos.push(localStorage["todo." + i + ".text"]);*/
       }
     }
   }
   
   function toDoDisplayer(){
-    toDos.forEach(function(value)
+    toDos.forEach(function(item)
     {
-      $("#items").append("<li>" + value + "</li>");
-      window.console.log("Displayed: " + value);
+      $("#items").append("<li>" + item.text + "</li>");
+      window.console.log("Displayed: " + item.text);
     }
     )
   }
@@ -65,6 +75,8 @@
             
       $("li").on('click', function () {
         window.console.log("Click happened");
+        toDelete = $('li').index(this)
+        window.console.log(toDelete);
         $(this).slideUp();
       });
       
@@ -75,6 +87,7 @@
   
 </head>
 <body>
+  <div id="middlebox">
   <h1>To-Do List:</h1>
   
   <ol id="items">
@@ -82,10 +95,10 @@
   </ol>
 
   <form id="target">
-    <input type= "text" value="value text" />
-    <input type = "button" value="Submit Button" />
+    <input type="text" value="To Do" />
+    <input type="button" value="Submit Button" />
   </form>
-  
+</div>
 
   
 </body>
